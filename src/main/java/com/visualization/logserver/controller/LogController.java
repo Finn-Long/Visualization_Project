@@ -31,6 +31,11 @@ public class LogController {
         return logService.getByStudentName(name);
     }
 
+    @GetMapping("/logs/id/{id}")
+    public List<Log> getLogByStudentId(@PathVariable String id) throws ExecutionException, InterruptedException {
+        return logService.getByStudentId(id);
+    }
+
     @GetMapping("/logs/milestones")
     public List<Log> getMilestones() throws ExecutionException, InterruptedException {
         return logService.getAllMilestone();

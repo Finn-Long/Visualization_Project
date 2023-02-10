@@ -1,5 +1,6 @@
 package com.visualization.logtransformer;
 
+import com.visualization.logtransformer.transformers.BashLogTransformer;
 import com.visualization.logtransformer.transformers.CyverseLogTransformer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +16,9 @@ public class LogTransformerApplication {
 
     public static void main (String []args) throws ParseException, IOException, ExecutionException, InterruptedException {
         context = SpringApplication.run(LogTransformerApplication.class, args);
-        CyverseLogTransformer cyverseLogTransformer = new CyverseLogTransformer("plugin_logs.json", context);
-        cyverseLogTransformer.setLog();
+//        CyverseLogTransformer cyverseLogTransformer = new CyverseLogTransformer("plugin_logs.json", context);
+//        cyverseLogTransformer.setLog();
+        BashLogTransformer bashLogTransformer = new BashLogTransformer("bash_logs.json", context);
+        bashLogTransformer.setLog();
     }
 }

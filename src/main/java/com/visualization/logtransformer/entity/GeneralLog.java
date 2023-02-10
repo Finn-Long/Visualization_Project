@@ -4,10 +4,7 @@ import com.google.cloud.Timestamp;
 import com.visualization.logserver.entity.Content;
 import com.visualization.logserver.entity.Milestone;
 import com.visualization.logserver.entity.Student;
-
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class GeneralLog {
     private Student student;

@@ -68,6 +68,21 @@ public class LogService {
         return result;
     }
 
+    public List<Log> getByStudentId(String id) throws ExecutionException, InterruptedException {
+        final List<Log> result = new ArrayList<>();
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        try {
+            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("student.id", id).orderBy("timestamp").get();
+            QuerySnapshot queryResult = querySnapshot.get();
+            for (QueryDocumentSnapshot document : queryResult) {
+                result.add(document.toObject(Log.class));
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            System.out.println(e);
+        }
+        return result;
+    }
+
     public List<Log> getAllMilestone() {
         final List<Log> result = new ArrayList<>();
         Firestore dbFirestore = FirestoreClient.getFirestore();
