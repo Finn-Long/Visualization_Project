@@ -16,9 +16,9 @@ public class LogTransformerApplication {
 
     public static void main (String []args) throws ParseException, IOException, ExecutionException, InterruptedException {
         context = SpringApplication.run(LogTransformerApplication.class, args);
-//        CyverseLogTransformer cyverseLogTransformer = new CyverseLogTransformer("plugin_logs.json", context);
-//        cyverseLogTransformer.setLog();
-        BashLogTransformer bashLogTransformer = new BashLogTransformer("bash_logs.json", context);
-        bashLogTransformer.setLog();
+        CyverseLogTransformer cyverseLogTransformer = new CyverseLogTransformer("plugin_logs.json", context);
+        cyverseLogTransformer.setLog();
+//        BashLogTransformer bashLogTransformer = new BashLogTransformer("bash_logs.json", context);
+//        bashLogTransformer.setLog();
     }
 }

@@ -36,15 +36,6 @@ public class GeneralLog {
         return timestamp;
     }
 
-
-//    public void setTimestamp(String timestampString) throws ParseException {
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-//        Date date = simpleDateFormat.parse(timestampString);
-//        Timestamp timestamp1 = Timestamp.ofTimeSecondsAndNanos(date.getTime() / 1000,
-//                (int) ((date.getTime() % 1000) * 1000000));
-//        this.timestamp = timestamp1;
-//    }
-
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }

@@ -22,9 +22,6 @@ import java.util.concurrent.ExecutionException;
 
 public class CyverseLogTransformer extends Transformer{
     private static Object lock;
-//    private String jsonFileName;
-//    private ApplicationContext context;
-//    private Firestore firestore;
 
     private final Map<String, String> milestoneIdentifier = new HashMap<>();
 
@@ -37,10 +34,6 @@ public class CyverseLogTransformer extends Transformer{
         this.lock = new Object();
         populateMilestoneIdentifier();
     }
-
-//    public void testAdd() {
-//        firestore.collection("logs").document().set(new Student("test", "test"));
-//    }
 
     public void setLog() throws IOException, ExecutionException, InterruptedException, ParseException {
         JsonObject rawLog = getLogJsonHelper();
@@ -93,8 +86,6 @@ public class CyverseLogTransformer extends Transformer{
                 (int) ((date.getTime() % 1000) * 1000000));
         return timestamp;
     }
-
-
 
     public String validateGetHelper(JsonObject obj, String key) {
         if (obj.get(key) != null) {
