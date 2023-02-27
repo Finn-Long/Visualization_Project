@@ -6,13 +6,9 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.visualization.logserver.entity.Content;
-import com.visualization.logserver.entity.Milestone;
-import com.visualization.logserver.entity.Student;
 import com.visualization.logtransformer.entity.GeneralLog;
 import com.visualization.logtransformer.service.FirebaseService;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -65,9 +61,11 @@ public class Transformer implements TransformerInterface{
 
     public void setLog() throws IOException, ExecutionException, InterruptedException, ParseException {};
 
-    public void addLogHelper(Student student, Milestone milestone, Content content, String source, Timestamp timestamp) throws ParseException {
+    public void addLogHelper(Timestamp timestamp, String source, String id, String name, Boolean isMilestone,
+                             String description, String behavior, String result, String error, int executionCount,
+                             int errorCount, int duration) {
         // Write data to Firestore
-        GeneralLog log = new GeneralLog(student, timestamp, milestone, source, content);
+        GeneralLog log = new GeneralLog(timestamp,source,id,name,isMilestone,description,behavior,result,error,executionCount,errorCount, duration);
         firestore.collection("logs").document().set(log);
     }
 

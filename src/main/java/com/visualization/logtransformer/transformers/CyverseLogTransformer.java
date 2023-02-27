@@ -4,9 +4,6 @@ import com.google.cloud.Timestamp;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.visualization.logserver.entity.Content;
-import com.visualization.logserver.entity.Milestone;
-import com.visualization.logserver.entity.Student;
 import org.springframework.context.ApplicationContext;
 
 import java.io.File;
@@ -14,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +20,10 @@ import java.util.concurrent.ExecutionException;
 
 public class CyverseLogTransformer extends Transformer{
     private static Object lock;
+
+    private String[] milestoneUrl;
+
+    private String[] milestoneDesc;
 
     private final Map<String, String> milestoneIdentifier = new HashMap<>();
 
@@ -36,7 +38,7 @@ public class CyverseLogTransformer extends Transformer{
     }
 
     public void setLog() throws IOException, ExecutionException, InterruptedException, ParseException {
-        JsonObject rawLog = getLogJsonHelper();
+        JsonObject rawLog = getLogJsonHelper(getJsonFileName());
         JsonArray logArray = rawLog.get("logs").getAsJsonArray();
         String[] randomNames = getRandomNamesHelper(logArray.size());
         for (int i = 0; i < logArray.size(); i ++) {
@@ -51,24 +53,35 @@ public class CyverseLogTransformer extends Transformer{
                 }
             }
             JsonArray allLogs = log.get("log").getAsJsonObject().get("logArray").getAsJsonArray();
+            int count = 0;
+            Timestamp milestoneStartTime = null;
             for (int j = 0; j < allLogs.size(); j ++) {
+                count ++;
                 JsonObject individualLog = allLogs.get(j).getAsJsonObject();
                 String behavior = validateGetHelper(individualLog, "event");
                 //String eventType = validateGetHelper(individualLog, "eventType");
                 String result = validateGetHelper(individualLog, "url");
-                Student student = new Student(studentId, fakeName);
-                Content content = new Content(behavior,result);
-                Milestone milestone;
-                String desc = containsHelper(result);
-                if (desc == null) {
-                    milestone = new Milestone(false);
-                }else {
-                    milestone = new Milestone(desc, true);
-                }
+                Boolean isMilestone = false;
+                String description = null;
                 String timestampString = validateGetHelper(individualLog, "timestamp");
                 Timestamp timestamp = getCyverseTimestampHelper(timestampString);
+                int executionCount = -1;
+                int milestoneIndex = containsHelper(result);
+                int duration = -1;
+                if (milestoneIndex != -1) {
+                    if (milestoneIndex % 2 == 1) {
+                        isMilestone = true;
+                        description = milestoneDesc[milestoneIndex];
+                        executionCount = count;
+                        duration = (int) Duration.between(milestoneStartTime.toSqlTimestamp().toInstant(),timestamp.toSqlTimestamp().toInstant()).toMinutes();
+                        System.out.println(duration);
+                    }else {
+                        milestoneStartTime = timestamp;
+                    }
+                    count = 0;
+                }
                 try{
-                    addLogHelper(student,milestone,content,source,timestamp);
+                    addLogHelper(timestamp,source,studentId,fakeName,isMilestone,description,behavior,result,null,executionCount,-1, duration);
                 }catch (Exception e) {
                     System.out.println(e);
                 }
@@ -95,8 +108,8 @@ public class CyverseLogTransformer extends Transformer{
         }
     }
 
-    public JsonObject getLogJsonHelper() {
-        File file = new File("./" + getJsonFileName());
+    public JsonObject getLogJsonHelper(String fileName) {
+        File file = new File("./" + fileName);
         try (FileReader reader = new FileReader(file)) {
             JsonObject obj = JsonParser.parseReader(reader).getAsJsonObject();
             return obj;
@@ -106,16 +119,22 @@ public class CyverseLogTransformer extends Transformer{
         }
     }
 
-    private String containsHelper(String url) {
-        for (Map.Entry<String, String> set :
-                milestoneIdentifier.entrySet()) {
-            String key = set.getKey();
-            String value = set.getValue();
-            if (url.contains(key)) {
-                return value;
+    private int containsHelper(String url) {
+        for (int i = 0; i < milestoneUrl.length; i++) {
+            if (url.contains(milestoneUrl[i])) {
+                return i;
             }
         }
-        return null;
+        return -1;
+//        for (Map.Entry<String, String> set :
+//                milestoneIdentifier.entrySet()) {
+//            String key = set.getKey();
+//            String value = set.getValue();
+//            if (url.contains(key)) {
+//                return value;
+//            }
+//        }
+//        return null;
     }
 
     private void populateMilestoneIdentifier() {
@@ -244,8 +263,10 @@ public class CyverseLogTransformer extends Transformer{
                 "DNA Command-Line in progress: Pre-Quiz: Unix Permissions",
                 "DNA Command-Line in progress: Post-Quiz: Unix Permissions"
         };
-        for (int i = 0; i < quiz_urls.length; i ++) {
-            milestoneIdentifier.put(quiz_urls[i], quiz_names[i]);
-        }
+        milestoneUrl = quiz_urls;
+        milestoneDesc = quiz_names;
+//        for (int i = 0; i < quiz_urls.length; i ++) {
+//            milestoneIdentifier.put(quiz_urls[i], quiz_names[i]);
+//        }
     }
 }

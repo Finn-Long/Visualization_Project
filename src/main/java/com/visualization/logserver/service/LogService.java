@@ -57,7 +57,7 @@ public class LogService {
         final List<Log> result = new ArrayList<>();
         Firestore dbFirestore = FirestoreClient.getFirestore();
         try {
-            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("student.name", name).orderBy("timestamp").get();
+            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("name", name).orderBy("timestamp").get();
             QuerySnapshot queryResult = querySnapshot.get();
             for (QueryDocumentSnapshot document : queryResult) {
                 result.add(document.toObject(Log.class));
@@ -72,7 +72,7 @@ public class LogService {
         final List<Log> result = new ArrayList<>();
         Firestore dbFirestore = FirestoreClient.getFirestore();
         try {
-            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("student.id", id).orderBy("timestamp").get();
+            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("id", id).orderBy("timestamp").get();
             QuerySnapshot queryResult = querySnapshot.get();
             for (QueryDocumentSnapshot document : queryResult) {
                 result.add(document.toObject(Log.class));
@@ -87,7 +87,7 @@ public class LogService {
         final List<Log> result = new ArrayList<>();
         Firestore dbFirestore = FirestoreClient.getFirestore();
         try {
-            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("milestone.milestone", true).orderBy("timestamp").get();
+            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("milestone", true).orderBy("timestamp").get();
             QuerySnapshot queryResult = querySnapshot.get();
             for (QueryDocumentSnapshot document : queryResult) {
                 result.add(document.toObject(Log.class));
@@ -102,7 +102,7 @@ public class LogService {
         final List<Log> result = new ArrayList<>();
         Firestore dbFirestore = FirestoreClient.getFirestore();
         try {
-            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("student.name", name).whereEqualTo("milestone.milestone", true).orderBy("timestamp").get();
+            ApiFuture<QuerySnapshot> querySnapshot = dbFirestore.collection(COLLECTION_NAME).whereEqualTo("name", name).whereEqualTo("milestone", true).orderBy("timestamp").get();
             QuerySnapshot queryResult = querySnapshot.get();
             for (QueryDocumentSnapshot document : queryResult) {
                 result.add(document.toObject(Log.class));

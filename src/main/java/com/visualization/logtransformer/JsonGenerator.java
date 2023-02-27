@@ -22,7 +22,7 @@ public class JsonGenerator {
 
     public static void generate_plugin_logs() throws IOException, InterruptedException{
         String url_str = "https://us-south.functions.appdomain.cloud/api/v1/web/ORG-UNC-dist-seed-james_dev/cyverse/get-cyverse-log";
-        String jsonInpuString = "{\"body\":{\"password\":\"password\",\"skip\":1000,\"limit\":2,\"log_type\":\"ChromePlugin\",\"course_id\":\"Cyverse_Cloud_Tutorial\"}}";
+        String jsonInpuString = "{\"body\":{\"password\":\"password\",\"skip\":0,\"limit\":9000,\"log_type\":\"ChromePlugin\",\"course_id\":\"Cyverse_Cloud_Tutorial\"}}";
         String file_name = "plugin_logs.json";
         generate_logs(url_str, jsonInpuString, file_name);
     }

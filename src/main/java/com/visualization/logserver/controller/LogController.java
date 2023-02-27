@@ -2,6 +2,7 @@ package com.visualization.logserver.controller;
 
 import com.visualization.logserver.entity.Log;
 import com.visualization.logserver.service.LogService;
+import com.visualization.logserver.service.LogServiceLocal;
 import com.visualization.logtransformer.entity.GeneralLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ public class LogController {
 
     @Autowired
     private LogService logService;
+
 
     @GetMapping("logs/get_all_logs")
     public List<Log> getLogTest() throws ExecutionException, InterruptedException {
